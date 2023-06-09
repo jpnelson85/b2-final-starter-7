@@ -40,9 +40,9 @@ RSpec.describe "coupon index page" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
   
-    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", percent_off: 0.10, dollar_off: 0, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "10dollars", percent_off: 0.0, dollar_off: 10, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", percent_off: 0.50, dollar_off: 0, merchant_id: @merchant1.id)
+    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", percent_off: 10, merchant_id: @merchant1.id)
+    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "10dollars", dollar_off: 10, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", percent_off: 50, merchant_id: @merchant1.id)
   end
 
   it "display all coupons after clicking link in merchant dashboard" do
@@ -59,8 +59,9 @@ RSpec.describe "coupon index page" do
     visit "/merchants/#{@merchant1.id}/coupons"
 
     expect(page).to have_content("Coupon Name - #{@coupon1.name}")
+    expect(page).to have_content("Percentage Amount Off - #{@coupon1.percent_off}%")
+    expect(page).to have_content("Coupon Name - #{@coupon2.name}")
     expect(page).to have_content("Dollar Amount Off - $#{@coupon1.dollar_off}")
-    expect(page).to have_content("Percentage Amount Off - #{(@coupon1.percent_off * 100).to_i}%")
   end
 
   it "each coupon name is a link to that coupon's show page" do

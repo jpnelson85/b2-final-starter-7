@@ -1,18 +1,15 @@
 class CouponsController < ApplicationController
-  
-  def index
-    @coupons = @merchant.coupons
-  end
+  before_action :set_merchant
 
   def new
-    @coupon = Coupon.new
+    @coupon = @merchant.coupons.new
   end
 
   def create
-    @coupon = Coupon.new(coupon_params)
+    @coupon = @merchant.coupons.new(coupon_params)
 
     if @coupon.save
-      redirect_to "merchants/#{@merchant.id}/coupons"
+      redirect_to merchant_coupons_path(@merchant)
     else
       render :new
     end
