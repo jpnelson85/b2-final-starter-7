@@ -1,7 +1,7 @@
 <h1> Coupons </h1>
+<a href="/merchants/<%= @merchant.id %>/coupons/new"> Create New Coupon </a>
 <% @merchant.coupons.each do |coupon| %>
   <p> Coupon Name - <a href="/merchants/<%= @merchant.id %>/coupons/<%= coupon.id %>"><%= coupon.name %></a> </p> 
   <p> Dollar Amount Off - $<%= coupon.dollar_off %> </p>
   <p> Percentage Amount Off - <%= (coupon.percent_off * 100).to_i %>% </p>
-  
 <% end %>
