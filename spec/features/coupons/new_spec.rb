@@ -40,23 +40,23 @@ RSpec.describe "coupon index page" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
   
-    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", percent_off: 0.10, dollar_off: 0, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "10dollars", percent_off: 0.0, dollar_off: 10, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", percent_off: 0.50, dollar_off: 0, merchant_id: @merchant1.id)
+    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0, merchant_id: @merchant1.id)
+    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "10dollars", amount: 10, amount_type: 1, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0, merchant_id: @merchant1.id)
   end
 
   it 'can create a new coupon' do
     visit "merchants/#{@merchant1.id}/coupons/new"
-    
+
     fill_in 'Name', with: '20% off'
     fill_in 'Code', with: '20percent'
     fill_in 'Amount', with: 20
-    select 'percent', from: 'Amount type'
+    select 'percent_off', from: 'Amount type'
 
     click_button 'Create Coupon'
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
-    expect(page).to have_content('20percent')
+    expect(page).to have_content('20% off')
   end
 
 end
