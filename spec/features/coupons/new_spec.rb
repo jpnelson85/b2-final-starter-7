@@ -48,12 +48,12 @@ RSpec.describe "coupon index page" do
   it 'can create a new coupon' do
     visit new_merchant_coupon_path(@merchant1)
 
-    fill_in 'Name', with: '20% off'
-    fill_in 'Code', with: '20percent'
-    fill_in 'Amount', with: 20
-    select 'percent', from: 'Amount type'
+    fill_in ('Name'), with: ('20% off')
+    fill_in ('Code'), with: ('20percent')
+    fill_in ('Amount'), with: (20)
+    select ('percent'), from: ('Amount type')
 
-    click_button 'Create Coupon'
+    click_button ('Create Coupon')
 
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
     expect(page).to have_content('20% off')

@@ -48,15 +48,15 @@ RSpec.describe "coupon index page" do
   it 'shows the coupon name, code, amount, amount_type, and status' do
     visit merchant_coupon_path(@merchant1, @coupon_1)
 
-    expect(page).to have_content(@coupon_1.name)
-    expect(page).to have_content(@coupon_1.code)
-    expect(page).to have_content(@coupon_1.amount)
-    expect(page).to have_content(@coupon_1.amount_type)
-    expect(page).to have_content(@coupon_1.active)
-    expect(page).to_not have_content(@coupon_2.name)
-    expect(page).to_not have_content(@coupon_2.code)
-    expect(page).to_not have_content(@coupon_2.amount)
-    expect(page).to_not have_content(@coupon_2.amount_type)
+    expect(page).to have_content("Coupon Name #{@coupon_1.name}")
+    expect(page).to have_content("Coupon Code #{@coupon_1.code}")
+    expect(page).to have_content("Coupon Amount #{@coupon_1.amount}")
+    expect(page).to have_content("Coupon Amount Type #{@coupon_1.amount_type}")
+    expect(page).to have_content("Coupon Active #{@coupon_1.active}")
+    expect(page).to_not have_content("Coupon Name #{@coupon_2.name}")
+    expect(page).to_not have_content("Coupon Code #{@coupon_2.code}")
+    expect(page).to_not have_content("Coupon Amount #{@coupon_2.amount}")
+    expect(page).to_not have_content("Coupon Amount Type #{@coupon_2.amount_type}")
   end
 
   it 'shows how many times the coupon has been used succesfully' do 
