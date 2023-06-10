@@ -2,9 +2,9 @@
 <%= link_to "Create New Coupon", new_merchant_coupon_path(@merchant) %>
 <% @merchant.coupons.each do |coupon| %>
   <p> Coupon Name <%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %> </p>
-  <% if coupon.amount_type == "dollar_off" %>
+  <% if coupon.amount_type == "dollar" %>
     <p>Dollar Amount Off $<%= coupon.amount %></p>
-  <% elsif coupon.amount_type == "percent_off" %>
+  <% elsif coupon.amount_type == "percent" %>
     <p>Percentage Amount Off <%= coupon.amount %>%</p>
   <% end %>
 <% end %>

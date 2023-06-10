@@ -66,7 +66,7 @@ RSpec.describe "coupon index page" do
 
   it "each coupon name is a link to that coupon's show page" do
     visit "/merchants/#{@merchant1.id}/coupons"
-save_and_open_page
+
     expect(page).to have_link("#{@coupon1.name}")
 
     click_link "#{@coupon1.name}"

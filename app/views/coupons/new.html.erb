@@ -1,6 +1,7 @@
 <h1>New Coupon</h1>
 
 <%= form_with(model: @coupon, url: merchant_coupons_path(@merchant) , local: true) do |form| %>
+  
 <div>
   <%= form.label :name %>
   <%= form.text_field :name %>
@@ -18,7 +19,7 @@
 
 <div>
   <%= form.label :amount_type %>
-  <%= form.select :amount_type, ['percent_off', 'dollar_off'] %>
+  <%= form.select :amount_type, ['percent', 'dollar'] %>
 </div>
 
 <div>

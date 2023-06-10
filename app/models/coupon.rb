@@ -4,6 +4,6 @@ class Coupon < ApplicationRecord
   belongs_to :merchant
   has_many :invoices
 
-  enum amount_type: { "percent_off": 0, "dollar_off": 1 }
+  enum amount_type: { "percent": 0, "dollar": 1 }
 
 end
