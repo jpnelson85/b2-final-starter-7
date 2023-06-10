@@ -6,7 +6,6 @@ class Coupon < ApplicationRecord
 
   enum amount_type: { "percent": 0, "dollar": 1 }
 
-  def self.count_successful_coupons
-    Invoice.find_by(coupon_id: self.id, status: 2)
-  end
+  def count_successful_coupons
+    invoices.joins(:transactions).where("invoices.status = ? AND transactions.result = ?", 2, 1).count  end
 end

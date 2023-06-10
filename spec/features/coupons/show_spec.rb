@@ -11,10 +11,14 @@ RSpec.describe "coupon index page" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
+    @coupon_1 = Coupon.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0, merchant_id: @merchant1.id)
+    @coupon_2 = Coupon.create!(name: "$10 dollars off", code: "20dollars", amount: 20, amount_type: 1, merchant_id: @merchant1.id)
+    @coupon_3 = Coupon.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0, merchant_id: @merchant1.id)
+
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
-    @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
-    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2)
+    @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2, coupon_id: @coupon_1.id)
+    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2, coupon_id: @coupon_1.id)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
@@ -39,31 +43,26 @@ RSpec.describe "coupon index page" do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
-  
-    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "20dollars", amount: 20, amount_type: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0, merchant_id: @merchant1.id)
   end
 
   it 'shows the coupon name, code, amount, amount_type, and status' do
-    visit merchant_coupon_path(@merchant1, @coupon1)
+    visit merchant_coupon_path(@merchant1, @coupon_1)
 
-    expect(page).to have_content(@coupon1.name)
-    expect(page).to have_content(@coupon1.code)
-    expect(page).to have_content(@coupon1.amount)
-    expect(page).to have_content(@coupon1.amount_type)
-    expect(page).to have_content(@coupon1.active)
-    expect(page).to_not have_content(@coupon2.name)
-    expect(page).to_not have_content(@coupon2.code)
-    expect(page).to_not have_content(@coupon2.amount)
-    expect(page).to_not have_content(@coupon2.amount_type)
+    expect(page).to have_content(@coupon_1.name)
+    expect(page).to have_content(@coupon_1.code)
+    expect(page).to have_content(@coupon_1.amount)
+    expect(page).to have_content(@coupon_1.amount_type)
+    expect(page).to have_content(@coupon_1.active)
+    expect(page).to_not have_content(@coupon_2.name)
+    expect(page).to_not have_content(@coupon_2.code)
+    expect(page).to_not have_content(@coupon_2.amount)
+    expect(page).to_not have_content(@coupon_2.amount_type)
   end
 
   it 'shows how many times the coupon has been used succesfully' do 
-    visit merchant_coupon_path(@merchant1, @coupon1)
+    visit merchant_coupon_path(@merchant1, @coupon_1)
 
-    expect(page).to have_content("Times Used: 0")
-
-    2 - completed
+    expect(page).to have_content("Coupon Count Successful #{@coupon_1.count_successful_coupons}")
+    expect(page).to_not have_content("Coupon Count Successful #{@coupon_2.count_successful_coupons}")
   end
 end
