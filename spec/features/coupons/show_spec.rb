@@ -65,4 +65,16 @@ RSpec.describe "coupon index page" do
     expect(page).to have_content("Coupon Count Successful #{@coupon_1.count_successful_coupons}")
     expect(page).to_not have_content("Coupon Count Successful #{@coupon_2.count_successful_coupons}")
   end
+
+  xit 'displays button to deactivate coupon' do
+    visit merchant_coupon_path(@merchant1, @coupon_1)
+
+    expect(page).to have_link("Deactivate Coupon")
+
+    click_link ("Deactivate Coupon")
+
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_1))
+    expect(page).to have_content("Coupon Active false")
+    expect(page).to_not have_content("Coupon Active true")
+  end
 end

@@ -1,5 +1,5 @@
 class Coupon < ApplicationRecord
-  validates_presence_of :name, :code
+  validates_presence_of :name, :code, :amount, :amount_type
   validates_uniqueness_of :code
   validate :validate_max_activated_coupons, on: :create
   belongs_to :merchant

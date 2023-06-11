@@ -3,5 +3,6 @@
 <p> Coupon Amount <%= @coupon.amount %> </p>
 <p> Coupon Amount Type <%= @coupon.amount_type %> </p>
 <p> Coupon Active <%= @coupon.active %> </p>
+<p> <%= link_to "Deactivate Coupon", merchant_coupon_path(@merchant, @coupon), method: :patch %> </p>
 <p> Coupon Count Successful <%= @coupon.count_successful_coupons %> </p>
 

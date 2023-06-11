@@ -1,17 +1,18 @@
 class CouponsController < ApplicationController
-  before_action :set_merchant
 
   def new
-    @coupon = @merchant.coupons.new
+    merchant
+    @coupon_new = merchant.coupons.new
   end
 
   def create
-    @coupon = @merchant.coupons.new(coupon_params)
+    coupon = Coupon.new(coupon_params)
 
-    if @coupon.save
-      redirect_to merchant_coupons_path(@merchant)
+    if coupon.save
+      require 'pry'; binding.pry
+      redirect_to merchant_coupons_path(merchant)
     else
-      render :new
+      redirect_to new_merchant_coupon_path(merchant)
     end
   end
 
@@ -19,13 +20,27 @@ class CouponsController < ApplicationController
     @coupon = Coupon.find(params[:id])
   end
 
+  def update
+    coupon = Coupon.find(params[:id])
+    if coupon.update(active_params)
+      redirect_to merchant_coupon_path(merchant, coupon)
+    else
+      render :show
+    end
+  end
+
   private
 
-  def set_merchant
+  def merchant
     @merchant = Merchant.find(params[:merchant_id])
   end
 
+  def active_params
+    params.require(:coupon).permit(:active)
+  end
+
   def coupon_params
-    params.require(:coupon).permit(:name, :code, :amount, :amount_type)
+    params.require(:coupon).permit(:name, :code, :amount, :amount_type, :merchant_id, :active)
   end
 end
+
