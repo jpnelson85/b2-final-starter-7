@@ -1,33 +1,35 @@
 class CouponsController < ApplicationController
+before_action :merchant, only: [:index, :new, :create]
+before_action :merchant_coupon, only: [:show, :edit, :update]
 
-  def new
-    merchant
-    @coupon_new = merchant.coupons.new
-  end
-
-  def create
-    coupon = Coupon.new(coupon_params)
-
-    if coupon.save
-      require 'pry'; binding.pry
-      redirect_to merchant_coupons_path(merchant)
-    else
-      redirect_to new_merchant_coupon_path(merchant)
-    end
+  def index
+    @coupons = @merchant.coupons
   end
 
   def show
-    @coupon = Coupon.find(params[:id])
+  end
+  
+  def new
+  end
+
+  def create
+    @coupon = Coupon.new(coupon_params)
+    @coupon.merchant_id = params[:merchant_id]
+    if @coupon.valid?
+      @coupon.save
+      redirect_to merchant_coupons_path(@merchant)
+    else
+      redirect_to new_merchant_coupon_path(@merchant)
+      flash.notice =  "Coupon code must be unique"
+    end
   end
 
   def update
-    coupon = Coupon.find(params[:id])
-    if coupon.update(active_params)
-      redirect_to merchant_coupon_path(merchant, coupon)
-    else
-      render :show
-    end
+    @coupon.update(active_params)
+    redirect_to merchant_coupon_path(@merchant, @coupon)
   end
+
+  
 
   private
 
@@ -35,12 +37,17 @@ class CouponsController < ApplicationController
     @merchant = Merchant.find(params[:merchant_id])
   end
 
+  def merchant_coupon
+    @merchant = Merchant.find(params[:merchant_id])
+    @coupon = Coupon.find(params[:id])
+  end
+
   def active_params
     params.require(:coupon).permit(:active)
   end
 
   def coupon_params
-    params.require(:coupon).permit(:name, :code, :amount, :amount_type, :merchant_id, :active)
+    params.permit(:name, :code, :amount, :amount_type)
   end
 end
 
