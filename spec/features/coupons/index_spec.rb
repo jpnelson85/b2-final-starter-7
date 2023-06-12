@@ -85,4 +85,11 @@ RSpec.describe "coupon index page" do
 
     expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
   end
+
+  it "coupons are separated between active and inactive" do
+    visit merchant_coupons_path(@merchant1)
+
+    expect(page).to have_content("Active Coupons")
+    save_and_open_page
+  end
 end
