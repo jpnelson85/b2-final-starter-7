@@ -43,6 +43,7 @@ RSpec.describe "coupon index page" do
     @coupon1 = @merchant1.coupons.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0)
     @coupon2 = @merchant1.coupons.create!(name: "$10 dollars off", code: "10dollars", amount: 10, amount_type: 1)
     @coupon3 = @merchant1.coupons.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0)
+    @coupon4 = @merchant1.coupons.create!(name: "$5 dollars off", code: "5dollars", amount: 5, amount_type: 1, active: false)
   end
 
   it "display all coupons after clicking link in merchant dashboard" do
@@ -89,7 +90,16 @@ RSpec.describe "coupon index page" do
   it "coupons are separated between active and inactive" do
     visit merchant_coupons_path(@merchant1)
 
-    expect(page).to have_content("Active Coupons")
-    save_and_open_page
+    within("#active_coupons") do
+      expect(page).to have_content("Active Coupons")
+      expect(page).to have_content(@coupon1.name)
+      expect(page).to_not have_content(@coupon4.name)
+    end
+    
+    within("#inactive_coupons") do
+      expect(page).to have_content("Inactive Coupons")
+      expect(page).to have_content(@coupon4.name)
+      expect(page).to_not have_content(@coupon1.name)
+    end
   end
 end

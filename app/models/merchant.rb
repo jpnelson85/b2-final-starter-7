@@ -55,11 +55,11 @@ class Merchant < ApplicationRecord
             .first&.created_at&.to_date
   end
 
-  def active_coupons
-    self.where(active: true)
+  def enabled_items
+    items.where(status: 1)
   end
 
-  def inactive_coupons
-    self.where(active: false)
+  def disabled_items
+    items.where(status: 0)
   end
 end
