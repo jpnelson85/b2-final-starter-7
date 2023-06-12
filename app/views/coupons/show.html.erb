@@ -3,5 +3,12 @@
 <p> Coupon Amount <%= @coupon.amount %> </p>
 <p> Coupon Amount Type <%= @coupon.amount_type %> </p>
 <p> Coupon Active <%= @coupon.active %> </p>
+<div id="status_change">
+  <% if @coupon.active == true %>
+      <%= button_to "Deactivate Coupon", "/merchants/#{@merchant.id}/coupons/#{@coupon.id}", method: :patch, params: { active: false } %>
+  <% elsif @coupon.active == false %>
+      <%= button_to "Activate Coupon", "/merchants/#{@merchant.id}/coupons/#{@coupon.id}", method: :patch, params: { active: true } %>
+  <% end %>
+</div>
 <p> Coupon Count Successful <%= @coupon.count_successful_coupons %> </p>
 

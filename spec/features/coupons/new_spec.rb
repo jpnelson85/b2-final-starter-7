@@ -46,32 +46,32 @@ RSpec.describe "coupon index page" do
   end
 
   it 'can create a new coupon' do
-    visit new_merchant_coupon_path(@merchant1)
+    visit new_merchant_coupon_path(@merchant1.id)
 
-    fill_in 'Name', with: '20% off'
-    fill_in 'Code', with: '20percent'
-    fill_in 'Amount', with: 20
+    fill_in 'Name', with: '30% off'
+    fill_in 'Code', with: '30percent'
+    fill_in 'Amount', with: 30
     select 'percent', from: 'Amount type'
 
-    click_button 'Create Coupon'
+    click_button ('Create Coupon')
 
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
-    expect(page).to have_content('20% off')
+    expect(page).to have_content('30% off')
   end
 
-  # it 'validates uniqueness of code and displays flash message' do
-  #   existing_code = @coupon1.code
+  it 'validates uniqueness of code and displays flash message' do
+    existing_code = @coupon1.code
   
-  #   visit new_merchant_coupon_path(@merchant1)
+    visit new_merchant_coupon_path(@merchant1)
   
-  #   fill_in 'Name', with: 'New Coupon'
-  #   fill_in 'Code', with: existing_code
-  #   fill_in 'Amount', with: 20
-  #   select 'percent', from: 'Amount type'
+    fill_in 'Name', with: 'New Coupon'
+    fill_in 'Code', with: existing_code
+    fill_in 'Amount', with: 20
+    select 'percent', from: 'Amount type'
   
-  #   click_button 'Create Coupon'
+    click_button 'Create Coupon'
   
-  #   expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
-  #   expect(page).to have_content('Coupon code must be unique')
-  # end
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+    expect(page).to have_content('Coupon code must be unique')
+  end
 end

@@ -40,9 +40,9 @@ RSpec.describe "coupon index page" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
   
-    @coupon1 = Coupon.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create!(name: "$10 dollars off", code: "10dollars", amount: 10, amount_type: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0, merchant_id: @merchant1.id)
+    @coupon1 = @merchant1.coupons.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0)
+    @coupon2 = @merchant1.coupons.create!(name: "$10 dollars off", code: "10dollars", amount: 10, amount_type: 1)
+    @coupon3 = @merchant1.coupons.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0)
   end
 
   it "display all coupons after clicking link in merchant dashboard" do
@@ -50,37 +50,39 @@ RSpec.describe "coupon index page" do
 
     expect(page).to have_link("View All Coupons")
 
-    click_link "View All Coupons"
+    click_link ("View All Coupons")
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
+    expect(current_path).to eq(merchant_coupons_path(@merchant1))
   end
 
   it "displays all coupon names and the amount off" do
-    visit "/merchants/#{@merchant1.id}/coupons"
+    visit merchant_coupons_path(@merchant1)
 
-    expect(page).to have_content("Coupon Name #{@coupon1.name}")
-    expect(page).to have_content("Percentage Amount Off #{@coupon1.amount}")
-    expect(page).to have_content("Coupon Name #{@coupon2.name}")
-    expect(page).to have_content("Dollar Amount Off $#{@coupon2.amount}")
+    within("#coupon_details") do
+      expect(page).to have_content("Coupon Name #{@coupon1.name}")
+      expect(page).to have_content("Percentage Amount Off #{@coupon1.amount}")
+      expect(page).to have_content("Coupon Name #{@coupon2.name}")
+      expect(page).to have_content("Dollar Amount Off $#{@coupon2.amount}")
+    end
   end
 
-  it "each coupon name is a link to that coupon's show page" do
-    visit "/merchants/#{@merchant1.id}/coupons"
+  it "each coupon name is a link to that coupon show page" do
+    visit merchant_coupons_path(@merchant1)
 
     expect(page).to have_link("#{@coupon1.name}")
 
     click_link "#{@coupon1.name}"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
+    
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
   end
 
   it "display link to create new coupon that takes you to new coupon form" do
-    visit "merchants/#{@merchant1.id}/coupons"
+    visit merchant_coupons_path(@merchant1)
 
     expect(page).to have_link("Create New Coupon")
 
-    click_link "Create New Coupon"
+    click_link ("Create New Coupon")
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
   end
 end
