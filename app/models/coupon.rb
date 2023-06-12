@@ -1,7 +1,6 @@
 class Coupon < ApplicationRecord
   validates_presence_of :name, :code, :amount, :amount_type
   validates_uniqueness_of :code
-  validate :validate_max_activated_coupons, on: :create
   belongs_to :merchant
   has_many :invoices
 
@@ -11,11 +10,10 @@ class Coupon < ApplicationRecord
     invoices.joins(:transactions).where("invoices.status = ? AND transactions.result = ?", 2, 1).count
   end
 
-  def validate_max_activated_coupons
+  def validate_max_activated_coupons(merchant_id)
     return unless active?
-
-    if merchant.coupons.active.count >= 5
-      errors.add(:base, "Merchant can have a maximum of 5 activated coupons")
+    count_coupons = Merchant.find(merchant_id)
+    if count_coupons.coupons.where(:active == true).count >= 5
     end
   end
 end
