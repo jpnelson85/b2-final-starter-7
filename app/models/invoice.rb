@@ -18,7 +18,7 @@ class Invoice < ApplicationRecord
   def grand_total
     if coupon == nil 
       total_revenue
-    elsif coupon.amount_type == "dollars-off"
+    elsif coupon.amount_type == "dollar"
       [total_revenue - coupon.amount, 0.0].max
     else  
       total_revenue - (total_revenue*(coupon.amount/100.00))
