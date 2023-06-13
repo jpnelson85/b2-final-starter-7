@@ -1,5 +1,5 @@
 class InvoicesController < ApplicationController
-  before_action :find_invoice_and_merchant, only: [:show, :update]
+  before_action :find_invoice_and_merchant, only: [:show, :update, :show]
   before_action :find_merchant, only: [:index]
 
   def index
@@ -9,6 +9,8 @@ class InvoicesController < ApplicationController
   def show
     @customer = @invoice.customer
     @invoice_item = InvoiceItem.where(invoice_id: params[:id]).first
+    @invoice = Invoice.find(params[:id])
+    @coupon = @invoice&.coupon
   end
 
   def update
