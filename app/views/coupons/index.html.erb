@@ -20,7 +20,7 @@
   <% @merchant.coupons.each do |coupon| %>
     <% if coupon.active == false %>
       <p> Coupon Name <%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %> </p>
-      <% if coupon.amount_type == "dollar" %>
+      <% if coupon.amount_type == 1 %>
       <p>Dollar Amount Off $<%= coupon.amount %></p>
       <% elsif coupon.amount_type == "percent" %>
     <p>Percentage Amount Off <%= coupon.amount %>%</p>
