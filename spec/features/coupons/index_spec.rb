@@ -107,8 +107,9 @@ RSpec.describe "coupon index page" do
     visit merchant_coupons_path(@merchant1)
 
     expect(page).to have_content("Upcoming Holidays")
-  end
+  end 
 
+  # sad path 2
   it 'has name and date of next 3 upcoming holidays' do
     visit merchant_coupons_path(@merchant1)
 
@@ -119,5 +120,7 @@ RSpec.describe "coupon index page" do
     expect(page).to have_content("2023-07-04")
     expect(page).to have_content("Labour Day")
     expect(page).to have_content("2023-09-04")
+    expect(page).to_not have_content("Christmas")
+    expect(page).to_not have_content("2023-12-25")
   end
 end

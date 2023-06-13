@@ -59,6 +59,7 @@ RSpec.describe "coupon index page" do
     expect(page).to have_content('30% off')
   end
 
+  # sad path 1
   it 'validates uniqueness of code and displays flash message' do
     existing_code = @coupon1.code
   
