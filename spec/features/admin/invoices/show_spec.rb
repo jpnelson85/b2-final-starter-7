@@ -54,7 +54,7 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display the total revenue the invoice will generate" do
-    expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
+    expect(page).to have_content("Total Revenue: #{@i1.total_revenue}")
 
     expect(page).to_not have_content(@i2.total_revenue)
   end
@@ -151,10 +151,17 @@ end
   it 'shows name of the coupon applied to the invoice as a link to coupon show page' do
     visit admin_invoice_path(@invoice_1)
 
-    expect(page).to have_link("Name: #{@coupon2.name}, Code: #{@coupon2.code}")
+    expect("Total Revenue: #{@invoice_1.total_revenue}").to appear_before("Name: #{@coupon2.name}")
+    expect("Total Revenue: #{@invoice_1.total_revenue}").to appear_before("Code: #{@coupon2.code}")
+    expect("Name: #{@coupon2.name}").to appear_before("Total Revenue Including Coupons: #{@invoice_1.grand_total}")
+    expect("Code: #{@coupon2.code}").to appear_before("Total Revenue Including Coupons: #{@invoice_1.grand_total}")
 
-    visit merchant_invoice_path(@merchant1, @invoice_2)
 
-    expect(page).to have_content("Name: #{@coupon3.name}, Code: #{@coupon3.code}")
+    visit admin_invoice_path(@invoice_2)
+
+    expect("Total Revenue: #{@invoice_2.total_revenue}").to appear_before("Name: #{@coupon3.name}")
+    expect("Total Revenue: #{@invoice_2.total_revenue}").to appear_before("Code: #{@coupon3.code}")
+    expect("Coupon Name: #{@coupon3.name}").to appear_before("Total Revenue Including Coupons: #{@invoice_2.grand_total}")
+    expect("Coupon Code: #{@coupon3.code}").to appear_before("Total Revenue Including Coupons: #{@invoice_2.grand_total}")
   end
 end
