@@ -22,14 +22,18 @@ RSpec.describe "invoices show" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
-    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
-    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-28 14:54:09")
+    @coupon1 = @merchant1.coupons.create!(name: "10% off", code: "10percent", amount: 10, amount_type: 0)
+    @coupon2 = @merchant1.coupons.create!(name: "$10 dollars off", code: "10dollars", amount: 10, amount_type: 1)
+    @coupon3 = @merchant1.coupons.create!(name: "50% off", code: "50percent", amount: 50, amount_type: 0)
+    @coupon4 = @merchant1.coupons.create!(name: "$5 dollars off", code: "5dollars", amount: 5, amount_type: 1, active: false)
+
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon2.id, created_at: "2012-03-27 14:54:09")
+    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon3.id, created_at: "2012-03-28 14:54:09")
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
     @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
-
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
@@ -51,6 +55,7 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
   end
 
   it "shows the invoice information" do
@@ -100,4 +105,35 @@ RSpec.describe "invoices show" do
     end
   end
 
+  it 'show subtotal for merchant from invoice not including coupons' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content("Total Revenue: #{@invoice_1.total_revenue}")
+  end
+
+  it 'shows the total revenue for the invoice including coupons' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content("Total Revenue Including Coupons: #{@invoice_1.grand_total}")
+
+    visit merchant_invoice_path(@merchant1, @invoice_2)
+
+    expect(page).to have_content("Total Revenue Including Coupons: #{@invoice_2.grand_total}")
+
+    visit merchant_invoice_path(@merchant1, @invoice_3)
+
+    expect(page).to have_content("Total Revenue Including Coupons: #{@invoice_3.grand_total}")
+  end
+
+  it 'shows name of the coupon applied to the invoice as a link to coupon show page' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_link("Name: #{@coupon2.name}, Code: #{@coupon2.code}")
+
+    visit merchant_invoice_path(@merchant1, @invoice_2)
+    
+    expect(page).to have_content("Name: #{@coupon3.name}, Code: #{@coupon3.code}")
+  end
 end
+
+  
