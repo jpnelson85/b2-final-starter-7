@@ -102,4 +102,23 @@ RSpec.describe "coupon index page" do
       expect(page).to_not have_content(@coupon1.name)
     end
   end
+
+  it 'has header of upcoming holidays' do
+    visit merchant_coupons_path(@merchant1)
+    save_and_open_page
+
+    expect(page).to have_content("Upcoming Holidays")
+  end
+
+  it 'has name and date of next 3 upcoming holidays' do
+    visit merchant_coupons_path(@merchant1)
+
+    expect(page).to have_content("Upcoming Holidays")
+    expect(page).to have_content("Juneteenth")
+    expect(page).to have_content("2023-06-19")
+    expect(page).to have_content("Independence Day")
+    expect(page).to have_content("2023-07-04")
+    expect(page).to have_content("Labour Day")
+    expect(page).to have_content("2023-09-04")
+  end
 end

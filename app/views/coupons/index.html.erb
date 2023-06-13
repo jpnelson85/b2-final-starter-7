@@ -29,3 +29,9 @@
   <% end %>
   </div>
 </div>
+<h2> Upcoming Holidays </h2>
+<% retrieve_holidays.each do |holiday| %>
+  <p> <%= holiday[:name] %> <%= holiday[:date] %> </p>
+  <% end %>
+
+

@@ -16,6 +16,4 @@ class Coupon < ApplicationRecord
     if count_coupons.coupons.where(:active == true).count >= 5
     end
   end
-
-
 end
