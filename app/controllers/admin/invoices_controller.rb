@@ -1,10 +1,11 @@
 class Admin::InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :edit, :update]
+  before_action :set_invoice, only: [:show, :update, :edit]
   def index
     @invoices = Invoice.all
   end
 
   def show
+    
   end
 
   def edit
@@ -17,6 +18,7 @@ class Admin::InvoicesController < ApplicationController
   end
 
   private
+
   def set_invoice
     @invoice = Invoice.find(params[:id])
   end

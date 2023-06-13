@@ -132,7 +132,7 @@ RSpec.describe "invoices show" do
 
     visit merchant_invoice_path(@merchant1, @invoice_2)
     
-    expect(page).to have_content("Name: #{@coupon3.name}, Code: #{@coupon3.code}")
+    expect(page).to have_link("Name: #{@coupon3.name}, Code: #{@coupon3.code}")
   end
 end
 
