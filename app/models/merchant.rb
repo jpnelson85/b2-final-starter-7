@@ -62,4 +62,12 @@ class Merchant < ApplicationRecord
   def disabled_items
     items.where(status: 0)
   end
+
+  def five_max_active_coupons
+    if self.coupons.where(:active == true).count >= 5
+      true
+    else
+      false
+    end
+  end
 end

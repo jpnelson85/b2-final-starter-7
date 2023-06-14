@@ -170,4 +170,22 @@ describe Merchant do
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
   end
+
+  describe "model methods" do
+    it 'validate_max_activated_coupons' do
+      merchant1 = Merchant.create!(name: 'Hair Care')
+      merchant2 = Merchant.create!(name: 'Toe Care')
+    
+      coupon_1 = Coupon.create!(name: "10% off", code: "10OFF", amount: 10, amount_type: 0, merchant_id: merchant1.id, active: true)
+      coupon_2 = Coupon.create!(name: "20$ off", code: "20OFF", amount: 20, amount_type: 1, merchant_id: merchant1.id, active: true)
+      coupon_3 = Coupon.create!(name: "30% off", code: "30OFF", amount: 30, amount_type: 0, merchant_id: merchant1.id, active: true)
+      coupon_4 = Coupon.create!(name: "40$ off", code: "40OFF", amount: 40, amount_type: 1, merchant_id: merchant1.id, active: true)
+      coupon_5 = Coupon.create!(name: "50% off", code: "50OFF", amount: 50, amount_type: 0, merchant_id: merchant1.id, active: true)
+      coupon_6 = Coupon.create!(name: "60$ off", code: "60OFF", amount: 60, amount_type: 1, merchant_id: merchant2.id, active: true)
+      coupon_7 = Coupon.create!(name: "70% off", code: "70OFF", amount: 70, amount_type: 0, merchant_id: merchant2.id, active: true)
+    
+      expect(merchant1.five_max_active_coupons).to eq(true)
+      expect(merchant2.five_max_active_coupons).to eq(false)
+    end
+  end
 end
