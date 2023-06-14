@@ -13,10 +13,16 @@ before_action :merchant_coupon, only: [:show, :edit, :update]
   end
 
   def create
-    if !merchant.five_max_active_coupons?
-      Coupon.new(coupon_params)
+    @coupon = @merchant.coupons.new(coupon_params)
+    if @merchant.five_max_active_coupons
+      redirect_to new_merchant_coupon_path(@merchant)
+      flash.notice = "Merchant can have a maximum of 5 activated coupons"
+    elsif @coupon.invalid?
+      redirect_to new_merchant_coupon_path(@merchant)
+      flash.notice =  "Coupon code must be unique"
     else
-      flash[:error] = "You have reached the maximum number of active coupons"
+      @coupon.save
+      redirect_to merchant_coupons_path(@merchant)
     end
   end
 

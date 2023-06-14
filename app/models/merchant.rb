@@ -64,7 +64,10 @@ class Merchant < ApplicationRecord
   end
 
   def five_max_active_coupons
-    if self.coupons.where(:active == true).count < 5
+    if self.coupons.where(:active == true).count >= 5
+      true
+    else
+      false
     end
   end
 end
